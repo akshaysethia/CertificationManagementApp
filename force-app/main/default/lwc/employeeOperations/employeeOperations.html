@@ -1,0 +1,106 @@
+<template>
+    <lightning-tabset>
+        <lightning-tab label="Add Employee">
+            <lightning-card title="Add an Employee" icon-name="action:user">
+                <div style="margin: auto;">
+                    <lightning-record-edit-form object-api-name="Employee__c">
+                        <div class="slds-m-around_medium">
+                            <lightning-input label="Name" onchange={handleChange} placeholder="Enter your Name">
+                            </lightning-input>
+                            <lightning-input label="Email" onchange={handleChange} placeholder="Enter your Email">
+                            </lightning-input>
+                            <lightning-input label="Primary Skill" onchange={handleChange}
+                                placeholder="Enter your main Skill here"></lightning-input>
+                            <lightning-input label="Secondary Skill" onchange={handleChange}
+                                placeholder="Enter additional skills here, csv"></lightning-input>
+                            <lightning-input label="Experience" onchange={handleChange}
+                                placeholder="Enter Experience in months"></lightning-input>
+                            <lightning-input label="Comments" onchange={handleChange}
+                                placeholder="Enter any comments you have here !"></lightning-input>
+                            <br>
+                            <lightning-button label="Add Employee" variant="destructive-text" onclick={submit}>
+                            </lightning-button>
+                        </div>
+                    </lightning-record-edit-form>
+                </div>
+            </lightning-card>
+        </lightning-tab>
+        <lightning-tab label="Employee List">
+            <lightning-card title="List of all Employees">
+                <template if:true={employees}>
+                    <lightning-datatable key-field="Id" data={employees} columns={columns} hide-checkbox-column="true"
+                        onrowaction={handleRowActions}></lightning-datatable>
+                </template>
+
+                <template if:true={bShowModal}>
+                    <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+                        aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                        <div class="slds-modal__container">
+                            <header class="slds-modal__header">
+                                <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+                                    title="Close" onclick={closeModal}>
+                                    <lightning-icon icon-name="utility:close" alternative-text="close" variant="inverse"
+                                        size="small"></lightning-icon>
+                                </button>
+
+                                <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate"
+                                    if:false={isEditForm}>Employee Details</h2>
+                                <h2 id="modal-heading-02" class="slds-text-heading_medium slds-hyphenate"
+                                    if:true={isEditForm}>Update Employee Record</h2>
+                            </header>
+                            <!-- modal body -->
+                            <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1"
+                                if:false={isEditForm}>
+                                <dl class="slds-list_horizontal slds-wrap">
+                                    <dt class="slds-item_label slds-truncate" title="Emp_Name__c">Name :</dt>
+                                    <dd class="slds-item_detail slds-truncate">{record.Emp_Name__c}</dd>
+                                    <dt class="slds-item_label slds-truncate" title="Employee_Email__C">Email :</dt>
+                                    <dd class="slds-item_detail slds-truncate">
+                                        <lightning-formatted-email value={record.Employee_Email__c}>
+                                        </lightning-formatted-email>
+                                    </dd>
+                                    <dt class="slds-item_label slds-truncate" title="Primary_Skill__c">Primary Skill :
+                                    </dt>
+                                    <dd class="slds-item_detail slds-truncate">{record.Primary_Skill__c}</dd>
+                                    <dt class="slds-item_label slds-truncate" title="Secondary_Skill__c">Secondary Skill
+                                        :</dt>
+                                    <dd class="slds-item_detail slds-truncate">{record.Secondary_Skill__c}</dd>
+                                    <dt class="slds-item_label slds-truncate" title="Experience__c">Experience :</dt>
+                                    <dd class="slds-item_detail slds-truncate">{record.Experience__c}</dd>
+                                    <dt class="slds-item_label slds-truncate" title="Comments__c">Comments :</dt>
+                                    <dd class="slds-item_detail slds-truncate">{record.Comments__c}</dd>
+                                </dl>
+                            </div>
+
+                            <!-- showing record edit form -->
+                            <div if:true={isEditForm} class="slds-theme_default">
+                                <lightning-record-edit-form layout-type="Full" record-id={currentRecordId}
+                                    object-api-name="Employee__c" onsubmit={handleSubmit}>
+                                    <lightning-output-field field-name="Name"></lightning-output-field>
+                                    <lightning-input-field field-name="Emp_Name__c"></lightning-input-field>
+                                    <lightning-input-field field-name="Employee_Email__c"></lightning-input-field>
+                                    <lightning-input-field field-name="Primary_Skill__c"></lightning-input-field>
+                                    <lightning-input-field field-name="Secondary_Skill__c"></lightning-input-field>
+                                    <lightning-input-field field-name="Experience__c"></lightning-input-field>
+                                    <lightning-input-field field-name="Comments__c"></lightning-input-field>
+                                    <div style="text-align:center;">
+                                        <lightning-button class="slds-m-top_small" variant="destructive-text"
+                                            type="submit" label="Update Record"></lightning-button>
+                                    </div>
+                                </lightning-record-edit-form>
+                                <br>
+                            </div>
+
+                            <!-- modal footer start-->
+                            <footer class="slds-modal__footer" if:false={isEditForm}>
+                                <lightning-button variant="brand" label="Close" title="Close" onclick={closeModal}>
+                                </lightning-button>
+                            </footer>
+                        </div>
+                    </section>
+                    <div class="slds-backdrop slds-backdrop_open"></div>
+                </template>
+            </lightning-card>
+        </lightning-tab>
+    </lightning-tabset>
+</template>

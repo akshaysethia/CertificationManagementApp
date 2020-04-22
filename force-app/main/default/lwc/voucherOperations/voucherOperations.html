@@ -1,0 +1,91 @@
+<template>
+    <lightning-tabset>
+        <lightning-tab label="Add Voucher">
+            <lightning-card title="Add an Voucher" icon-name="standard:partner_marketing_budget">
+                <div style="margin: auto;">
+                    <lightning-record-form object-api-name="Voucher__c" onsuccess={handleSuccess} fields={fields}>
+                    </lightning-record-form>
+                </div>
+            </lightning-card>
+        </lightning-tab>
+        <lightning-tab label="Voucher List">
+            <lightning-card title="List of all Vouchers">
+                <template if:true={vouchers}>
+                    <lightning-datatable key-field="Id" data={vouchers} columns={columns} hide-checkbox-column="true"
+                        onrowaction={handleRowActions}>
+                    </lightning-datatable>
+                </template>
+                <template if:true={bShowModal}>
+                    <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+                        aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                        <div class="slds-modal__container">
+                            <header class="slds-modal__header">
+                                <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+                                    title="Close" onclick={closeModal}>
+                                    <lightning-icon icon-name="utility:close" alternative-text="close" variant="inverse"
+                                        size="small"></lightning-icon>
+                                </button>
+
+                                <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate"
+                                    if:false={isEditForm}>Voucher Details</h2>
+                                <h2 id="modal-heading-02" class="slds-text-heading_medium slds-hyphenate"
+                                    if:true={isEditForm}>Update Voucher Record</h2>
+                            </header>
+                            <!-- modal body -->
+                            <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1"
+                                if:false={isEditForm}>
+                                <dl class="slds-list_horizontal slds-wrap">
+                                    <dt class="slds-item_label slds-truncate" title="Voucher_Name__c">Voucher Name :
+                                    </dt>
+                                    <dd class="slds-item_detail slds-truncate">{record.Voucher_Name__c}</dd>
+                                    <dt class="slds-item_label slds-truncate" title="Voucher_Cost__c">Voucher Cost :
+                                    </dt>
+                                    <dd class="slds-item_detail slds-truncate">
+                                        <lightning-formatted-number value={record.Voucher_Cost__c}>
+                                        </lightning-formatted-number>
+                                    </dd>
+                                    <dt class="slds-item_label slds-truncate" title="Validity">Voucher Validity :
+                                    </dt>
+                                    <dd class="slds-item_detail slds-truncate">{record.Validity__c}</dd>
+                                    <dt class="slds-item_label slds-truncate" title="Active__c">Active :</dt>
+                                    <dd class="slds-item_detail slds-truncate">{record.Active__c}</dd>
+                                    <dt class="slds-item_label slds-truncate" title="Certification__c">Certification :
+                                    </dt>
+                                    <dd class="slds-item_detail slds-truncate">{record.Certification__c}</dd>
+                                    <dt class="slds-item_label slds-truncate" title="Comments__c">Comments :</dt>
+                                    <dd class="slds-item_detail slds-truncate">{record.Comments__c}</dd>
+                                </dl>
+                            </div>
+
+                            <!-- showing record edit form -->
+                            <div if:true={isEditForm} class="slds-theme_default">
+                                <lightning-record-edit-form layout-type="Full" record-id={currentRecordId}
+                                    object-api-name="Voucher__c" onsubmit={handleSubmit}>
+                                    <lightning-output-field field-name="Name"></lightning-output-field>
+                                    <lightning-input-field field-name="Voucher_Name__c"></lightning-input-field>
+                                    <lightning-input-field field-name="Voucher_Cost__c"></lightning-input-field>
+                                    <lightning-input-field field-name="Validity__c"></lightning-input-field>
+                                    <lightning-input-field field-name="Active__c"></lightning-input-field>
+                                    <lightning-input-field field-name="Certification__c"></lightning-input-field>
+                                    <lightning-input-field field-name="Comments__c"></lightning-input-field>
+                                    <div style="text-align:center;">
+                                        <lightning-button class="slds-m-top_small" variant="destructive-text"
+                                            type="submit" label="Update Voucher"></lightning-button>
+                                    </div>
+                                </lightning-record-edit-form>
+                                <br>
+                            </div>
+
+                            <!-- modal footer start-->
+                            <footer class="slds-modal__footer" if:false={isEditForm}>
+                                <lightning-button variant="brand" label="Close" title="Close" onclick={closeModal}>
+                                </lightning-button>
+                            </footer>
+                        </div>
+                    </section>
+                    <div class="slds-backdrop slds-backdrop_open"></div>
+                </template>
+            </lightning-card>
+        </lightning-tab>
+    </lightning-tabset>
+</template>

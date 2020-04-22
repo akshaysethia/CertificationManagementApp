@@ -1,0 +1,84 @@
+<template>
+    <lightning-tabset>
+        <lightning-tab label="Add Certification">
+            <lightning-card title="Add a Certification" icon-name="standard:knowledge">
+                <div style="margin: auto;">
+                    <lightning-record-edit-form object-api-name=" Certification__c">
+                        <div class="slds-m-around_medium">
+                            <lightning-input label="Name" onchange={handleChange}
+                                placeholder="Enter Certification Name">
+                            </lightning-input>
+                            <lightning-input label="Comments" onchange={handleChange}
+                                placeholder="Enter any comments you have here !"></lightning-input>
+                            <br>
+                            <lightning-button label="Add Certification" variant="destructive-text" onclick={submit}>
+                            </lightning-button>
+                        </div>
+                    </lightning-record-edit-form>
+                </div>
+            </lightning-card>
+        </lightning-tab>
+        <lightning-tab label="Certification List">
+            <lightning-card title="List of all Certifications">
+                <template if:true={data}>
+                    <lightning-datatable key-field="Id" data={data} columns={columns} hide-checkbox-column="true"
+                        onrowaction={handleActions}>
+                    </lightning-datatable>
+                </template>
+
+                <template if:true={bShowModal}>
+                    <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+                        aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                        <div class="slds-modal__container">
+                            <header class="slds-modal__header">
+                                <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+                                    title="Close" onclick={closeModal}>
+                                    <lightning-icon icon-name="utility:close" alternative-text="close" variant="inverse"
+                                        size="small"></lightning-icon>
+                                </button>
+
+                                <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate"
+                                    if:false={isEditForm}>Certification Details</h2>
+                                <h2 id="modal-heading-02" class="slds-text-heading_medium slds-hyphenate"
+                                    if:true={isEditForm}>Update Certification Record</h2>
+                            </header>
+
+                            <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1"
+                                if:false={isEditForm}>
+                                <dl class="slds-list_horizontal slds-wrap">
+                                    <dt class="slds-item_label slds-truncate" title="Cert_Name__c">Certification Name :</dt>
+                                    <dd class="slds-item_detail slds-truncate">{record.Cert_Name__c}</dd>
+                                    <dt class="slds-item_label slds-truncate" title="Comments__c">Comments :</dt>
+                                    <dd class="slds-item_detail slds-truncate">{record.Comments__c}</dd>
+                                </dl>
+                            </div>
+
+
+                            <div if:true={isEditForm} class="slds-theme_default">
+                                <lightning-record-edit-form layout-type="Full" record-id={currentRecordId}
+                                    object-api-name="Certification__c" onsubmit={handleSubmit}>
+                                    <lightning-output-field field-name="Name"></lightning-output-field>
+                                    <lightning-input-field field-name="Cert_Name__c"></lightning-input-field>
+                                    <lightning-input-field field-name="Comments__c"></lightning-input-field>
+                                    <br>
+                                    <div style="text-align:center;">
+                                        <lightning-button class="slds-m-top_small" variant="destructive-text"
+                                            type="submit" label="Update Record"></lightning-button>
+                                    </div>
+                                </lightning-record-edit-form>
+                                <br>
+                            </div>
+
+
+                            <footer class="slds-modal__footer" if:false={isEditForm}>
+                                <lightning-button variant="brand" label="Close" title="Close" onclick={closeModal}>
+                                </lightning-button>
+                            </footer>
+                        </div>
+                    </section>
+                    <div class="slds-backdrop slds-backdrop_open"></div>
+                </template>
+            </lightning-card>
+        </lightning-tab>
+    </lightning-tabset>
+</template>
