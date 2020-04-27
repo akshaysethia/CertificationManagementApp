@@ -24,7 +24,7 @@ const columns = [
     { label: 'Voucher Cost', fieldName: 'Voucher_Cost__c', type: 'currency', typeAttributes: { currencyCode: 'INR' }, cellAttributes: { alignment: 'left' } },
     { label: 'Voucher Validity', fieldName: 'Validity__c' },
     { label: 'Active', fieldName: 'Active__c' },
-    { label: 'Certification Name', fieldName: 'Certification__r.Cert_Name__c' },
+    // { label: 'Certification Name', fieldName: 'Certification__r.Cert_Name__c', type: 'text' },
     { label: 'Voucher Comments', fieldName: 'Comments__c' },
     {
         type: 'action',
@@ -67,7 +67,7 @@ export default class VoucherOperations extends LightningElement {
             this.vouchers = undefined;
             this.error = result.error;
         }
-        
+
         if (this.error != undefined) {
             console.log(this.error);
         } else {

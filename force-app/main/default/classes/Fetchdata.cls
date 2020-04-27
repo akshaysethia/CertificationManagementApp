@@ -17,7 +17,7 @@ public with sharing class Fetchdata {
 
     @AuraEnabled(Cacheable=true)
     public static List<Certification_Request__c> reqData(){
-        return [ SELECT Certification__c, Comments__c, Due_Date__c, Employee__c, Id, Name, Status__c, Voucher__c FROM Certification_Request__c ORDER BY Id ASC NULLS FIRST LIMIT 10 ];
+        return [ SELECT Certification__r.Cert_Name__c, Comments__c, Due_Date__c, Employee__r.Emp_Name__c, Id, Name, Status__c, Voucher__r.Voucher_Name__c FROM Certification_Request__c ORDER BY Id ASC NULLS FIRST LIMIT 10 ];
     }
 
 }

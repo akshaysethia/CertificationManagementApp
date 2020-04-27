@@ -25,7 +25,7 @@ const columns = [
     { label: 'Email', fieldName: 'Employee_Email__c', type: 'email' },
     { label: 'Primary Skill', fieldName: 'Primary_Skill__c', type: 'text' },
     { label: 'Secondary Skill', fieldName: 'Secondary_Skill__c', type: 'text' },
-    { label: 'Experience', fieldName: 'Experience__c', type: 'number' },
+    { label: 'Experience', fieldName: 'Experience__c', type: 'number', cellAttributes: { alignment: 'left' } },
     { label: 'Comments', fieldName: 'Comments__c', type: 'text' },
     {
         type: 'action',
