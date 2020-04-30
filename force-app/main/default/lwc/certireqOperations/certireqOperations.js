@@ -61,7 +61,19 @@ export default class CertireqOperations extends LightningElement {
     Certification_Request__c(result) {
         this.refreshTable = result;
         if (result.data) {
-            this.requests = result.data;
+            let values = [];
+            result.data.forEach(i => {
+                let value = {};
+                value.Name = i.Name;
+                value.Certification__c = i.Certification__r.Cert_Name__c;
+                value.Employee__c = i.Employee__r.Emp_Name__c;
+                value.Due_Date__c = i.Due_Date__c;
+                value.Status__c = i.Status__c;
+                value.Voucher__c = i.Voucher__r.Voucher_Name__c;
+                value.Comments__c = i.Comments__c;
+                values.push(value);
+            });
+            this.requests = values;
             this.error = undefined;
         } else if (result.error) {
             this.requests = undefined;

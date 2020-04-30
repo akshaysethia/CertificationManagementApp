@@ -24,7 +24,7 @@ const columns = [
     { label: 'Voucher Cost', fieldName: 'Voucher_Cost__c', type: 'currency', typeAttributes: { currencyCode: 'INR' }, cellAttributes: { alignment: 'left' } },
     { label: 'Voucher Validity', fieldName: 'Validity__c' },
     { label: 'Active', fieldName: 'Active__c' },
-    // { label: 'Certification Name', fieldName: 'Certification__r.Cert_Name__c', type: 'text' },
+    { label: 'Certification Name', fieldName: 'Certification__c', type: 'text' },
     { label: 'Voucher Comments', fieldName: 'Comments__c' },
     {
         type: 'action',
@@ -61,7 +61,19 @@ export default class VoucherOperations extends LightningElement {
     Voucher__c(result) {
         this.refreshTable = result;
         if (result.data) {
-            this.vouchers = result.data;
+            let values = [];
+            result.data.forEach(request => {
+                let value = {};
+                value.Name = request.Name;
+                value.Voucher_Name__c = request.Voucher_Name__c;
+                value.Voucher_Cost__c = request.Voucher_Cost__c;
+                value.Validity__c = request.Validity__c;
+                value.Active__c = request.Active__c;
+                value.Certification__c = request.Certification__r.Cert_Name__c;
+                value.Comments__c = request.Comments__c;
+                values.push(value);
+            });
+            this.vouchers = values;
             this.error = undefined;
         } else if (result.error) {
             this.vouchers = undefined;
