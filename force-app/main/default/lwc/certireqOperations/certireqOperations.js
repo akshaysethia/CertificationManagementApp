@@ -24,7 +24,7 @@ const columns = [
     { label: 'Employee Name', fieldName: 'Employee__c' },
     { label: 'Due Date', fieldName: 'Due_Date__c' },
     { label: 'Status', fieldName: 'Status__c' },
-    { label: 'Voucher Name', fieldName: 'Voucher__c' },
+    { label: 'Voucher Name', fieldName: 'Voucher__c', type: 'text' },
     { label: 'Request Comments', fieldName: 'Comments__c' },
     {
         type: 'action',
@@ -60,16 +60,22 @@ export default class CertireqOperations extends LightningElement {
     @wire(getRequestList)
     Certification_Request__c(result) {
         this.refreshTable = result;
+        console.log(result.data);
         if (result.data) {
             let values = [];
             result.data.forEach(i => {
                 let value = {};
+                value.Id = i.Id;
                 value.Name = i.Name;
                 value.Certification__c = i.Certification__r.Cert_Name__c;
                 value.Employee__c = i.Employee__r.Emp_Name__c;
                 value.Due_Date__c = i.Due_Date__c;
                 value.Status__c = i.Status__c;
-                value.Voucher__c = i.Voucher__r.Voucher_Name__c;
+                if (i.hasOwnProperty('Voucher__c')) {
+                    value.Voucher__c = i.Voucher__r.Voucher_Name__c;
+                } else {
+                    value.Voucher__c = undefined;
+                }
                 value.Comments__c = i.Comments__c;
                 values.push(value);
             });

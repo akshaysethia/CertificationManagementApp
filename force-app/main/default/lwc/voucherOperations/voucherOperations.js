@@ -64,6 +64,7 @@ export default class VoucherOperations extends LightningElement {
             let values = [];
             result.data.forEach(request => {
                 let value = {};
+                value.Id = request.Id;
                 value.Name = request.Name;
                 value.Voucher_Name__c = request.Voucher_Name__c;
                 value.Voucher_Cost__c = request.Voucher_Cost__c;
